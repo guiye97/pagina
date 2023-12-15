@@ -6,6 +6,30 @@ import streamlit_antd_components as sac
 
 from auxiliar import dias_meses, nombres_meses
 
+with st.sidebar:
+  #mes = st.number_input("Mes", min_value=1, max_value=12, value=1)
+  nombre_mes = st.selectbox("Mes", nombres_meses)
+  mes = nombres_meses.index(nombre_mes) + 1
+  dias = st.date_input("seleccionar dia",
+                       value=datetime.date(2019, 1, 1),
+                       min_value=datetime.date(2019, 1, 1),
+                       max_value=datetime.date(2019, 12, 31))
+  N = st.number_input('Nro. de paneles',
+                      value=12,
+                      min_value=0,
+                      max_value=1000,
+                      step=1)
+  Ppico = st.number_input('Potencia pico del panel (W)', value=240)
+  kp = st.number_input('Coef de T º',
+                       value=-0.0044,
+                       min_value=-0.1,
+                       max_value=0.0,
+                       step=0.001,
+                       format="%4f")
+  rend = st.number_input('Rndimiento', value=0.9)
+  Gstd = 1000
+  Tr = 25
+
 
 st.title("Generador Fotovoltaico - Santa Fe")
 
@@ -66,35 +90,10 @@ st.write("## Tabla anual 2019")
 tabla = pd.read_excel("Datos_climatologicos_Santa_Fe_2019.xlsx", index_col=0)
 tabla
 
-dia = "2019-04-25 13:50"
-temp = tabla.at[dia, "Temperatura (°C)"]
-st.write(f"# Temperatura del {dia}")
-st.write(temp)
-
-
-with st.sidebar:
-  #mes = st.number_input("Mes", min_value=1, max_value=12, value=1)
-  nombre_mes = st.selectbox("Mes", nombres_meses)
-  mes = nombres_meses.index(nombre_mes) + 1
-  dias = st.date_input("seleccionar dia",
-                       value=datetime.date(2019, 1, 1),
-                       min_value=datetime.date(2019, 1, 1),
-                       max_value=datetime.date(2019, 12, 31))
-  N = st.number_input('Nro. de paneles',
-                      value=12,
-                      min_value=0,
-                      max_value=1000,
-                      step=1)
-  Ppico = st.number_input('Potencia pico del panel (W)', value=240)
-  kp = st.number_input('Coef de T º',
-                       value=-0.0044,
-                       min_value=-0.1,
-                       max_value=0.0,
-                       step=0.001,
-                       format="%4f")
-  rend = st.number_input('Rndimiento', value=0.9)
-  Gstd = 1000
-  Tr = 25
+# dia = "2019-04-25 13:50"
+temp = tabla.at[f'{dias.year}-{dias.month}-{dias.day} 12:00', "Temperatura (°C)"]
+st.write(f"# Temperatura del {dias} al mediodía")
+st.info(temp)
 
 
 tab1, tab2 = st.tabs(['Datos mensuales', 'Datos diarios'])
