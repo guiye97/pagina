@@ -10,23 +10,27 @@ with st.sidebar:
   #mes = st.number_input("Mes", min_value=1, max_value=12, value=1)
   nombre_mes = st.selectbox("Mes", nombres_meses)
   mes = nombres_meses.index(nombre_mes) + 1
-  dias = st.date_input("seleccionar dia",
+  dias = st.date_input("Seleccionar día",
                        value=datetime.date(2019, 1, 1),
                        min_value=datetime.date(2019, 1, 1),
                        max_value=datetime.date(2019, 12, 31))
-  N = st.number_input('Nro. de paneles',
+  N = st.number_input('Número de paneles',
                       value=12,
                       min_value=0,
                       max_value=1000,
                       step=1)
-  Ppico = st.number_input('Potencia pico del panel (W)', value=240)
-  kp = st.number_input('Coef de T º',
+  Ppico = st.number_input('Potencia pico del panel [Watts]', value=240)
+  kp = st.number_input('Coef. de potencia-temperatura [1/°C]',
                        value=-0.0044,
                        min_value=-0.1,
                        max_value=0.0,
-                       step=0.001,
-                       format="%4f")
-  rend = st.number_input('Rndimiento', value=0.9)
+                       step=0.0001,
+                       format="%.4f")
+  rend = st.number_input('Rendimiento [%]',
+                         min_value=0.,
+                         max_value=1.,
+                         value=0.9,
+                         step=0.01)
   Gstd = 1000
   Tr = 25
 
@@ -38,21 +42,21 @@ sac.menu([
     sac.MenuItem('Historia', icon='book-fill', href='https://shorturl.at/cuIJN'),
     sac.MenuItem('Ubicación', icon='map', href='https://shorturl.at/ySTW8'),
     sac.MenuItem('Financiamiento', icon='cash-coin', href='https://shorturl.at/cuIJN', children=[
-      sac.MenuItem('Empresa Sotic SA', icon='truck', href='https://shorturl.at/vwzT9'),
-      sac.MenuItem('Secretaría de Estado CTI, prov. Sta. Fe', icon='building-check', href='https://shorturl.at/xDX01'),
+      sac.MenuItem('Empresa Sotic S.A.', icon='truck', href='https://shorturl.at/vwzT9'),
+      sac.MenuItem('Secretaría de Estado C.T.I. prov. Sta. Fe', icon='building-check', href='https://shorturl.at/xDX01'),
       sac.MenuItem('Facultad Regional Santa Fe', icon='buildings', href='https://www.frsf.utn.edu.ar'),
     ]),
     sac.MenuItem('Aval', icon='Building-check', children=[
         sac.MenuItem('EPE Santa Fe', icon='lightning-charge-fill', href='https://www.epe.santafe.gov.ar/institucional/'),
-        sac.MenuItem('Ex-Sub Secretaría de Energías Renovables, prov. Sta. Fe', icon='building-check'),
+        sac.MenuItem('Energías Renovables, prov. Sta. Fe', icon='building-check', href="https://www.argentina.gob.ar/economia/energia/energia-electrica/renovables"),
     ]),
     sac.MenuItem(type='divider'),
     sac.MenuItem('Consultas', icon='send', disabled=True),
     sac.MenuItem('Alumnos', type='group', children=[
-        sac.MenuItem('Dropsi, Pablo', icon='binoculars-fill'),
-        sac.MenuItem('Ferreyra, Guillermo', icon='usb-symbol'),
-        sac.MenuItem('Montenegro, Angel', icon='universal-access'),
-        sac.MenuItem('Smith, Axel', icon='xbox'),
+        sac.MenuItem('Dropsi, Pablo', icon='person-standing',href="https://es.wikipedia.org/wiki/Juan_Rom%C3%A1n_Riquelme"),
+        sac.MenuItem('Ferreyra, Guillermo', icon='person-standing',href="https://es.wikipedia.org/wiki/Steven_Seagal"),
+        sac.MenuItem('Montenegro, Angel', icon='person-standing',href="https://es.wikipedia.org/wiki/John_C._Reilly"),
+        sac.MenuItem('Smith, Axel', icon='person-standing ',href="https://es.wikipedia.org/wiki/Lionel_Messi"),
     ]),
 ], format_func='title', size='large', indent=30, open_all=True, return_index=True)
 
@@ -107,10 +111,10 @@ with tab1:
   )
 
   st.line_chart(data=tabla_mes, y='potencia (kW)')
-  st.write("# Tabla anual 2019 con Potencia")
+  st.write("# Tabla anual 2019 con potencia")
   tabla_mes
 
-  st.write(f'# Tabla {nombre_mes} 2019 con Temperatura')
+  st.write(f'# Tabla {nombre_mes} 2019 con temperatura')
   tabla_mes['Temperatura (°C)']
   st.line_chart(data=tabla_mes, y='Temperatura (°C)')
 
