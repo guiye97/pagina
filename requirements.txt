@@ -1,4 +1,3 @@
-accordion
 expander
 pandas
 openpyxl
