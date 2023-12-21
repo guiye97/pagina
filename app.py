@@ -1,4 +1,5 @@
 import datetime
+import numpy as np
 
 import pandas as pd
 import streamlit as st
@@ -57,10 +58,12 @@ with st.sidebar:
                          min_value=0.,
                          max_value=1.,
                          step=0.001)
-    Pinv = st.number_input('Potencia inversor [Watts]',
-                           value=2500,
-                           min_value=0,
-                           step=1)
+    Pinv = st.number_input('Potencia inversor [Kw]',
+                           value=2.5,
+                           min_value=0.,
+                           step=0.1)
+
+    Pmin = (mu / 100) * Pinv
 
 st.title("Generador Fotovoltaico - Santa Fe")
 
@@ -183,6 +186,18 @@ with tab1:
   st.write(f'# Tabla {nombre_mes} 2019 con temperatura')
   tabla_mes['Temperatura (°C)']
   st.line_chart(data=tabla_mes, y='Temperatura (°C)')
+
+  ##
+
+  # Calcular Pr acotado entre Pmin y Pinv
+  tabla_mes['Pr (kW)'] = np.clip(tabla_mes['potencia (kW)'], 0, Pinv)
+
+  # Graficar Potencia y Pr
+  st.write("# Tabla anual 2019 con potencia disponible y potencia generada:")
+  st.write(tabla_mes[['Temperatura (°C)', 'potencia (kW)', 'Pr (kW)']])
+  st.write(f'# Grafico de potencia generada en {nombre_mes}')
+  st.line_chart(data=tabla_mes, y='Pr (kW)')
+##
 
 with tab2:
   st.write('# Grafico temperatura diario')
